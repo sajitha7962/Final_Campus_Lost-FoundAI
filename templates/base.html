@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Lost & Found AI{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ── Navbar icon buttons ── */
+    .nav-icon-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      font-size: 18px;
+      cursor: pointer;
+      transition: background var(--trans), color var(--trans);
+      flex-shrink: 0;
+    }
+    .nav-icon-btn:hover { background: var(--surface2); color: var(--text); }
+    .nav-icon-btn.active { background: var(--surface2); color: var(--text); }
+    .nav-icon-btn .nav-badge {
+      position: absolute; top: 3px; right: 3px;
+      min-width: 16px; height: 16px; padding: 0 4px;
+      background: var(--red); color: #fff;
+      font-size: 10px; font-weight: 700;
+      border-radius: 99px;
+      display: none;
+      align-items: center; justify-content: center;
+      border: 2px solid var(--bg);
+      pointer-events: none;
+    }
+    .nav-icon-btn .nav-badge.show { display: flex; }
+
+    /* ── Dropdown panels ── */
+    .nav-dropdown {
+      position: fixed;
+      top: 68px;
+      right: 16px;
+      width: 320px;
+      max-height: 440px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.45);
+      z-index: 850;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: dropIn .18s ease;
+    }
+    .nav-dropdown.open { display: flex; }
+    @keyframes dropIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
+
+    .dropdown-header {
+      padding: 14px 16px 10px;
+      font-size: 13px; font-weight: 700;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+      flex-shrink: 0;
+    }
+    .dropdown-body {
+      overflow-y: auto;
+      flex: 1;
+      padding: 8px;
+    }
+    .dropdown-empty {
+      text-align: center;
+      padding: 28px 16px;
+      color: var(--text2);
+      font-size: 13px;
+    }
+    .dropdown-empty .di { font-size: 32px; margin-bottom: 8px; }
+
+    /* Notification items */
+    .notif-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background var(--trans);
+    }
+    .notif-item:hover { background: var(--surface2); }
+    .notif-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .notif-text { font-size: 13px; line-height: 1.4; flex: 1; }
+    .notif-time { font-size: 11px; color: var(--text2); margin-top: 3px; }
+
+    /* Chat items in navbar dropdown */
+    .chat-conv-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background var(--trans);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .chat-conv-item:hover { background: var(--surface2); }
+    .chat-conv-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: #fff; font-size: 14px; flex-shrink: 0;
+    }
+    .chat-conv-info { flex: 1; min-width: 0; }
+    .chat-conv-name { font-weight: 600; font-size: 13px; }
+    .chat-conv-preview { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Backdrop */
+    .dropdown-backdrop {
+      position: fixed; inset: 0; z-index: 849;
+      display: none;
+    }
+    .dropdown-backdrop.show { display: block; }
+  </style>
+</head>
+<body>
+
+{% block navbar %}
+<nav class="navbar">
+  <a href="/dashboard" class="navbar-brand">🔍 Lost&Found AI</a>
+  <div class="navbar-links">
+
+    <a href="/dashboard" style="color:var(--text2);font-size:13px;font-weight:500;padding:6px 11px;border-radius:8px;transition:all .28s">Dashboard</a>
+    <a href="/report"    style="color:var(--text2);font-size:13px;font-weight:500;padding:6px 11px;border-radius:8px;transition:all .28s">+ Report</a>
+
+    <!-- 🔔 Notifications button -->
+    <button class="nav-icon-btn" id="notifBtn" onclick="togglePanel('notif')" title="Notifications" aria-label="Notifications">
+      🔔
+      <span class="nav-badge" id="notifBadge"></span>
+    </button>
+
+    <!-- 💬 Messages button -->
+    <button class="nav-icon-btn" id="msgBtn" onclick="togglePanel('msg')" title="Messages" aria-label="Messages">
+      💬
+      <span class="nav-badge" id="msgBadge"></span>
+    </button>
+
+    <button class="btn btn-ghost btn-sm" onclick="logout()">Sign Out</button>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></button>
+
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+<!-- ── Backdrop (closes any open panel on outside click) ── -->
+<div class="dropdown-backdrop" id="dropBackdrop" onclick="closeAllPanels()"></div>
+
+<!-- ── Notifications panel ── -->
+<div class="nav-dropdown" id="notifPanel">
+  <div class="dropdown-header">🔔 Notifications</div>
+  <div class="dropdown-body" id="notifList">
+    <div class="dropdown-empty"><div class="di">🔔</div>Loading…</div>
+  </div>
+</div>
+
+<!-- ── Messages panel ── -->
+<div class="nav-dropdown" id="msgPanel">
+  <div class="dropdown-header">
+    💬 Private Match Chats
+    <span style="margin-left:auto;font-size:11px;color:var(--text2);font-weight:400">Session-scoped only</span>
+  </div>
+  <div class="dropdown-body" id="msgPanelList">
+    <div class="dropdown-empty"><div class="di">💬</div>Loading…</div>
+  </div>
+</div>
+
+{% block chatbot %}
+<button class="chat-fab" onclick="toggleChat()">🤖<div class="chat-dot"></div></button>
+<div class="chat-window">
+  <div class="chat-header">
+    <div class="chat-avatar">🤖</div>
+    <div>
+      <div class="chat-header-name">AI Assistant</div>
+      <div class="chat-header-status">🔒 Private & secure</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-row">
+    <input type="text" placeholder="Ask me anything…">
+    <button class="chat-send" onclick="sendChat()">➤</button>
+  </div>
+</div>
+{% endblock %}
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% block scripts %}{% endblock %}
+
+<script>
+/* ── Panel toggle system ─────────────────────────────── */
+let _openPanel = null;
+
+function togglePanel(name) {
+  if (_openPanel === name) { closeAllPanels(); return; }
+  closeAllPanels(false);
+
+  const panelId = name === 'notif' ? 'notifPanel' : 'msgPanel';
+  const btnId   = name === 'notif' ? 'notifBtn'   : 'msgBtn';
+  const panel   = document.getElementById(panelId);
+  const btn     = document.getElementById(btnId);
+  const backdrop= document.getElementById('dropBackdrop');
+
+  if (!panel) return;
+  panel.classList.add('open');
+  if (btn) btn.classList.add('active');
+  if (backdrop) backdrop.classList.add('show');
+  _openPanel = name;
+
+  // Load content
+  if (name === 'notif') loadNavNotifications();
+  if (name === 'msg')   loadNavMessages();
+}
+
+function closeAllPanels(resetState = true) {
+  ['notifPanel','msgPanel'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('open');
+  });
+  ['notifBtn','msgBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('active');
+  });
+  const backdrop = document.getElementById('dropBackdrop');
+  if (backdrop) backdrop.classList.remove('show');
+  if (resetState) _openPanel = null;
+}
+
+/* ── Notifications loader ────────────────────────────── */
+async function loadNavNotifications() {
+  const box = document.getElementById('notifList');
+  if (!box) return;
+  box.innerHTML = '<div class="dropdown-empty"><div class="di">⏳</div>Loading…</div>';
+
+  try {
+    const res  = await fetch('/api/notifications', { credentials: 'include' });
+    const data = await res.json();
+    const nb   = document.getElementById('notifBadge');
+
+    if (!Array.isArray(data) || data.length === 0) {
+      box.innerHTML = '<div class="dropdown-empty"><div class="di">🔔</div>No notifications yet</div>';
+      if (nb) { nb.innerText = ''; nb.classList.remove('show'); }
+      return;
+    }
+
+    if (nb) { nb.innerText = ''; nb.classList.remove('show'); }
+
+    box.innerHTML = data.map(n => {
+      const ago = timeAgoNav(n.created_at);
+      const icon = n.text.startsWith('🎯') ? '🎯'
+                 : n.text.startsWith('🎉') ? '🎉'
+                 : n.text.startsWith('✅') ? '✅'
+                 : n.text.startsWith('💬') ? '💬'
+                 : n.text.startsWith('⏳') ? '⏳' : '🔔';
+      const href = n.link || '/dashboard';
+      return `<a class="notif-item" href="${href}" onclick="closeAllPanels()">
+        <div class="notif-icon">${icon}</div>
+        <div class="notif-text">
+          ${escNav(n.text)}
+          <div class="notif-time">${ago}</div>
+        </div>
+      </a>`;
+    }).join('');
+  } catch(e) {
+    box.innerHTML = '<div class="dropdown-empty"><div class="di">⚠️</div>Failed to load</div>';
+  }
+}
+
+/* ── Messages (match sessions) loader ───────────────── */
+async function loadNavMessages() {
+  const box = document.getElementById('msgPanelList');
+  if (!box) return;
+  box.innerHTML = '<div class="dropdown-empty"><div class="di">⏳</div>Loading…</div>';
+
+  try {
+    const res  = await fetch('/api/my_matches', { credentials: 'include' });
+    const data = await res.json();
+    const mb   = document.getElementById('msgBadge');
+
+    if (!Array.isArray(data) || data.length === 0) {
+      box.innerHTML = '<div class="dropdown-empty"><div class="di">💬</div>No active match sessions yet.<br>Submit a report to get started.</div>';
+      if (mb) { mb.innerText = ''; mb.classList.remove('show'); }
+      return;
+    }
+
+    // Count sessions that need action
+    const needAction = data.filter(s => s.status !== 'confirmed' && !s.i_confirmed).length;
+    if (mb) {
+      if (needAction > 0) { mb.innerText = needAction; mb.classList.add('show'); }
+      else                { mb.innerText = ''; mb.classList.remove('show'); }
+    }
+
+    box.innerHTML = data.map(s => {
+      const statusIcon = s.status === 'confirmed'   ? '✅'
+                       : s.i_confirmed              ? '⏳'
+                       :                              '🔔';
+      const initials = (s.their_username || '?')[0].toUpperCase();
+      return `<a class="chat-conv-item" href="/match/${s.session_id}" onclick="closeAllPanels()">
+        <div class="chat-conv-avatar">${initials}</div>
+        <div class="chat-conv-info">
+          <div class="chat-conv-name">${escNav(s.their_item)} ${statusIcon}</div>
+          <div class="chat-conv-preview">Matches your ${escNav(s.my_item)} · ${s.score}% confidence</div>
+        </div>
+      </a>`;
+    }).join('');
+  } catch(e) {
+    box.innerHTML = '<div class="dropdown-empty"><div class="di">⚠️</div>Failed to load</div>';
+  }
+}
+
+/* ── Tiny helpers (self-contained, no dependency on script.js) ── */
+function escNav(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function timeAgoNav(ts) {
+  if (!ts) return '';
+  const utcStr = String(ts).trim().replace(' ', 'T') + (ts.includes('T') ? '' : 'Z');
+  const d = new Date(utcStr);
+  if (isNaN(d)) return String(ts);
+  return d.toLocaleString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    day:      '2-digit',
+    month:    'short',
+    year:     'numeric',
+    hour:     '2-digit',
+    minute:   '2-digit',
+    hour12:   true
+  }) + ' IST';
+}
+
+/* ── Keep badges updated every 60s while page is open ── */
+async function refreshBadges() {
+  try {
+    const res  = await fetch('/api/user', { credentials: 'include' });
+    if (!res.ok) return;
+    const data = await res.json();
+
+    const nb = document.getElementById('notifBadge');
+    if (nb) {
+      if ((data.notifications || 0) > 0) { nb.innerText = data.notifications; nb.classList.add('show'); }
+      else                               { nb.innerText = ''; nb.classList.remove('show'); }
+    }
+    const mb = document.getElementById('msgBadge');
+    if (mb) {
+      if ((data.unread_messages || 0) > 0) { mb.innerText = data.unread_messages; mb.classList.add('show'); }
+      else                                 { mb.innerText = ''; mb.classList.remove('show'); }
+    }
+  } catch(e) {}
+}
+
+/* Run on load + poll */
+window.addEventListener('DOMContentLoaded', () => {
+  refreshBadges();
+  setInterval(refreshBadges, 60000);
+});
+</script>
+</body>
+</html>

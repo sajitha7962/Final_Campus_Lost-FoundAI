@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Report Item — Lost & Found AI{% endblock %}
+{% block content %}
+<div class="report-wrap">
+  <div class="report-box">
+    <h2>📦 Report Lost / Found Item</h2>
+    <div class="lock-banner" style="margin-bottom:18px">
+      🔒 Your report is private. Only AI will read it to find a match — it is never shown publicly.
+    </div>
+    <p id="reportMsg" style="min-height:20px;font-size:12px;margin-bottom:10px"></p>
+    <div class="form-grid">
+      <div>
+        <label>Type *</label>
+        <select id="type"><option value="">— Select type —</option><option value="lost">🔴 Lost Item</option><option value="found">🟢 Found Item</option></select>
+      </div>
+      <div>
+        <label>Item Name *</label>
+        <input type="text" id="item" placeholder="e.g. Black Wallet, iPhone 13…">
+      </div>
+      <div>
+        <label>Description * <span class="text-muted text-xs">(be specific — improves AI accuracy)</span></label>
+        <textarea id="description" placeholder="Color, brand, size, distinguishing marks…"></textarea>
+      </div>
+      <div class="form-row">
+        <div><label>Location *</label><input type="text" id="place" placeholder="e.g. Canteen, Library Block A"></div>
+        <div><label>Date *</label><input type="date" id="date"></div>
+      </div>
+      <div>
+        <label>Your Contact Number *</label>
+        <input type="tel" id="contact" placeholder="Shown only after dual confirmation">
+      </div>
+      <div>
+        <label>Photo <span class="text-muted text-xs">(adds 35% image matching accuracy)</span></label>
+        <input type="file" id="image" accept="image/*" onchange="previewImage(event)" style="margin-bottom:7px">
+        <button type="button" class="camera-btn" id="cameraBtn" onclick="openCamera()">📷 Open Camera</button>
+        <video id="cameraStream" autoplay playsinline></video>
+        <img id="imgPreview" class="img-preview" alt="Preview">
+        <input type="hidden" id="capturedData">
+      </div>
+      <button class="btn" id="submitBtn" onclick="submitReport()" style="width:100%;padding:13px;font-size:14px">Submit Report</button>
+    </div>
+    <div style="margin-top:14px;text-align:center">
+      <a href="/dashboard" style="color:var(--text2);font-size:13px">← Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+window.addEventListener("DOMContentLoaded",()=>{
+  const d=document.getElementById("date");
+  if(d) d.value=new Date().toISOString().split("T")[0];
+});
+</script>
+{% endblock %}

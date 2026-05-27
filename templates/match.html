@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Private Match — Lost & Found AI{% endblock %}
+{% block chatbot %}{% endblock %}
+{% block content %}
+<div class="match-detail">
+
+  <div class="match-detail-header">
+    <a href="/dashboard" style="font-size:13px;color:var(--text2)">← Back to Dashboard</a>
+    <h2 style="margin-top:10px;font-size:20px;font-weight:800">🔒 Private Match Session #{{ session_id }}</h2>
+    <div class="lock-banner" style="margin-top:10px">
+      This session is private between you and your matched partner.
+      Contact details are revealed only after both parties confirm recovery.
+    </div>
+  </div>
+
+  <!-- Match details -->
+  <div id="sessionDetails">
+    <div class="skeleton sk-card"></div><div class="skeleton sk-card"></div>
+  </div>
+
+  <!-- Private chat -->
+  <div style="margin-top:24px">
+    <div class="section-head">💬 Private Session Chat</div>
+    <div class="text-sm text-muted mb-16">Only you and your matched partner can see these messages.</div>
+    <div class="chat-panel">
+      <div class="chat-panel-header">
+        🔒 Private Match Chat — Session #{{ session_id }}
+      </div>
+      <div class="chat-panel-msgs" id="sessionMsgBody"></div>
+      <div class="chat-panel-input">
+        <input type="text" id="sessionMsgInput" placeholder="Type a message to verify your match…"
+               onkeydown="if(event.key==='Enter')sendSessionMessage()">
+        <button class="btn btn-sm" onclick="sendSessionMessage()">Send ➤</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    initMatchPage({{ session_id }});
+  });
+</script>
+{% endblock %}

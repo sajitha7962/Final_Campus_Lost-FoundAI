@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Register — Lost & Found AI{% endblock %}
+{% block navbar %}{% endblock %}
+{% block chatbot %}{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-box">
+    <div class="auth-logo">✨</div>
+    <div class="auth-title">Create Account</div>
+    <div class="auth-sub">Your reports are always private — only AI can see them to find matches</div>
+    <p id="msg"></p>
+    <div class="auth-form">
+      <div class="input-group"><span class="input-icon">👤</span><input type="text" id="username" placeholder="Username (min 3 chars)" autocomplete="username"></div>
+      <div class="input-group"><span class="input-icon">🔒</span><input type="password" id="password" placeholder="Password (min 4 chars)" autocomplete="new-password"></div>
+      <div class="input-group"><span class="input-icon">🔒</span><input type="password" id="confirmPassword" placeholder="Confirm password" autocomplete="new-password"></div>
+      <button class="btn" id="registerBtn" onclick="register()" style="width:100%;padding:12px;font-size:14px">Create Account</button>
+    </div>
+    <div class="auth-link">Already have an account? <a href="/login">Sign in</a></div>
+    <div style="text-align:center;margin-top:12px"><button class="theme-toggle" onclick="toggleTheme()"></button></div>
+  </div>
+</div>
+{% endblock %}

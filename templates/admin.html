@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel — Lost & Found AI{% endblock %}
+{% block chatbot %}{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <div class="admin-sidebar">
+    <div style="padding:18px 22px;font-weight:800;font-size:15px;border-bottom:1px solid var(--border)">🛡️ Admin Panel</div>
+    <div class="admin-nav-item active" onclick="switchAdminTab('panelStats')">📊 Overview</div>
+    <div class="admin-nav-item" onclick="switchAdminTab('panelUsers')">👥 Users</div>
+    <div class="admin-nav-item" onclick="switchAdminTab('panelReports')">📋 Reports</div>
+    <div class="admin-nav-item" onclick="switchAdminTab('panelSessions')">🔒 Match Sessions</div>
+    <div class="admin-nav-item" onclick="switchAdminTab('panelActivity')">📜 Activity Log</div>
+    <div style="padding:18px 22px;margin-top:auto">
+      <a href="/dashboard" class="btn btn-ghost btn-sm" style="width:100%;justify-content:center">← Dashboard</a>
+    </div>
+  </div>
+
+  <div class="admin-content">
+
+    <div id="panelStats" class="admin-panel">
+      <h2 style="margin-bottom:22px;font-size:18px;font-weight:800">📊 Platform Overview</h2>
+      <div class="admin-stats-grid">
+        <div class="admin-stat"><div class="admin-stat-num grad-text" id="aTotal">—</div><div class="admin-stat-label">Total Users</div></div>
+        <div class="admin-stat"><div class="admin-stat-num grad-text" id="aReports">—</div><div class="admin-stat-label">Total Reports</div></div>
+        <div class="admin-stat"><div class="admin-stat-num" style="color:var(--green)" id="aActive">—</div><div class="admin-stat-label">Active Reports</div></div>
+        <div class="admin-stat"><div class="admin-stat-num" style="color:var(--cyan)" id="aResolved">—</div><div class="admin-stat-label">Resolved</div></div>
+        <div class="admin-stat"><div class="admin-stat-num" style="color:var(--accent2)" id="aSessions">—</div><div class="admin-stat-label">Match Sessions</div></div>
+        <div class="admin-stat"><div class="admin-stat-num" style="color:var(--gold)" id="aConfirmed">—</div><div class="admin-stat-label">Confirmed Recoveries</div></div>
+        <div class="admin-stat"><div class="admin-stat-num" style="color:var(--neon)" id="aMsgs">—</div><div class="admin-stat-label">Messages</div></div>
+      </div>
+    </div>
+
+    <div id="panelUsers" class="admin-panel" style="display:none">
+      <h2 style="margin-bottom:18px;font-size:18px;font-weight:800">👥 User Management</h2>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th>ID</th><th>Username</th><th>Role</th><th>Level</th><th>Stats</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="adminUsers"><tr><td colspan="7" class="text-muted" style="padding:18px">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="panelReports" class="admin-panel" style="display:none">
+      <h2 style="margin-bottom:18px;font-size:18px;font-weight:800">📋 Reports (Admin View)</h2>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th>ID</th><th>User</th><th>Type</th><th>Item</th><th>Place</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="adminReports"><tr><td colspan="7" class="text-muted" style="padding:18px">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="panelSessions" class="admin-panel" style="display:none">
+      <h2 style="margin-bottom:18px;font-size:18px;font-weight:800">🔒 Private Match Sessions</h2>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th>ID</th><th>Lost User</th><th>Found User</th><th>Score</th><th>Status</th><th>Created</th></tr></thead>
+          <tbody id="adminSessions"><tr><td colspan="6" class="text-muted" style="padding:18px">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="panelActivity" class="admin-panel" style="display:none">
+      <h2 style="margin-bottom:18px;font-size:18px;font-weight:800">📜 Activity Log</h2>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead><tr><th>User</th><th>Action</th><th>Detail</th><th>When</th></tr></thead>
+          <tbody id="adminActivity"><tr><td colspan="4" class="text-muted" style="padding:18px">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Lost & Found AI — Private & Secure{% endblock %}
+{% block navbar %}
+<nav class="navbar">
+  <a href="/" class="navbar-brand">🔍 Lost&Found AI</a>
+  <div class="navbar-links">
+    <a href="/login">Sign In</a>
+    <a href="/register" class="btn btn-sm">Get Started</a>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></button>
+  </div>
+</nav>
+{% endblock %}
+{% block chatbot %}{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-eyebrow">✦ Privacy-First AI Campus Lost & Found</div>
+  <h1>Find What You Lost,<br>Privately.</h1>
+  <p class="hero-sub">
+    Advanced AI privately matches lost and found reports using NLP and computer vision.
+    Only the two matched users ever see each other's details — zero public exposure.
+  </p>
+  <div class="hero-btns">
+    <a href="/register" class="btn" style="font-size:15px;padding:13px 28px">🚀 Get Started Free</a>
+    <a href="/login" class="btn btn-ghost" style="font-size:15px;padding:13px 28px">Sign In</a>
+  </div>
+  <div class="hero-privacy-banner">
+    <div class="privacy-pill">🔒 No Public Feed</div>
+    <div class="privacy-pill">👁️ Private Match Sessions</div>
+    <div class="privacy-pill">🛡️ Contact Hidden Until Confirmed</div>
+    <div class="privacy-pill">⭐ Fraud-Proof Rewards</div>
+  </div>
+</section>
+
+<section class="features">
+  <h2 class="section-title">How It Protects You</h2>
+  <p class="section-sub">Every design decision puts your privacy first.</p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>No Public Feed</h3>
+      <p>Nobody can browse all reports. There is no public list of lost or found items — completely eliminating fraudulent ownership claims.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h3>Private AI Matching</h3>
+      <p>AI silently scans reports in the background. Only the two matched users are notified — contact details stay hidden until both confirm.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <h3>Session-Scoped Chat</h3>
+      <p>Messages exist only within your private match session. Nobody else — not even admins — can read your conversation without cause.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✅</div>
+      <h3>Dual Confirmation</h3>
+      <p>Contact details and images are revealed ONLY after both parties confirm recovery — preventing identity theft and fraud.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⭐</div>
+      <h3>Honest Rewards</h3>
+      <p>Stars and credits are awarded only when the lost-item owner confirms recovery. Zero gaming, zero fake points.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📷</div>
+      <h3>Auth-Gated Images</h3>
+      <p>Uploaded images are served only to session participants. Attempting to access someone else's image returns a 403 Forbidden.</p>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:760px;margin:0 auto;padding:0 22px 70px">
+  <h2 class="section-title">Secure Recovery Flow</h2>
+  <p class="section-sub">Six steps, zero public exposure.</p>
+  <div style="display:flex;flex-direction:column;gap:14px">
+    {% for step in [
+      ("1️⃣","Report Privately","Submit your lost or found item — visible only to you and the AI system"),
+      ("2️⃣","AI Scans Silently","Hybrid NLP + image matching runs in the background immediately"),
+      ("3️⃣","Private Notification","Both matched users get a private notification — no details in the notification"),
+      ("4️⃣","Session Chat Opens","A private chat session opens between only the two matched users"),
+      ("5️⃣","Verify & Confirm","Chat to verify, then both parties click Confirm Recovery"),
+      ("6️⃣","Rewards Released","Contact revealed, finder earns stars — only after dual confirmation"),
+    ] %}
+    <div class="card" style="display:flex;align-items:flex-start;gap:14px;padding:18px">
+      <div style="font-size:28px;flex-shrink:0">{{ step[0] }}</div>
+      <div><div style="font-weight:700;margin-bottom:4px">{{ step[1] }}</div><div style="font-size:13px;color:var(--text2)">{{ step[2] }}</div></div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<footer><p>© 2024 Lost & Found AI — Privacy-first campus recovery platform</p></footer>
+{% endblock %}

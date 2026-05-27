@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Sign In — Lost & Found AI{% endblock %}
+{% block navbar %}{% endblock %}
+{% block chatbot %}{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-box">
+    <div class="auth-logo">🔐</div>
+    <div class="auth-title">Welcome Back</div>
+    <div class="auth-sub">Sign in to your private Lost & Found account</div>
+    <p id="msg"></p>
+    <div class="auth-form">
+      <div class="input-group"><span class="input-icon">👤</span><input type="text" id="username" placeholder="Username" autocomplete="username"></div>
+      <div class="input-group"><span class="input-icon">🔒</span><input type="password" id="password" placeholder="Password" autocomplete="current-password"></div>
+      <button class="btn" id="loginBtn" onclick="login()" style="width:100%;padding:12px;font-size:14px">Sign In</button>
+    </div>
+    <div class="auth-link">Don't have an account? <a href="/register">Create one</a></div>
+    <div style="text-align:center;margin-top:12px"><button class="theme-toggle" onclick="toggleTheme()"></button></div>
+  </div>
+</div>
+{% endblock %}

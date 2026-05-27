@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Lost & Found AI{% endblock %}
+{% block content %}
+<div class="page">
+
+  <!-- Header -->
+  <div class="dash-header">
+    <div>
+      <h1>👋 <span id="usernameDisplay" class="grad-text">—</span></h1>
+      <div class="text-sm text-muted" id="userLevel">Loading…</div>
+    </div>
+    <div class="flex gap-8">
+      <a href="/report" class="btn btn-sm">+ Report Item</a>
+      <button class="btn btn-sm btn-ghost" onclick="loadDashboard()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-value grad-text" id="stars">—</div>
+      <div class="stat-label">Stars Earned</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💎</div>
+      <div class="stat-value grad-text" id="credits">—</div>
+      <div class="stat-label">Credits</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔁</div>
+      <div class="stat-value grad-text" id="recoveries">—</div>
+      <div class="stat-label">Recoveries</div>
+    </div>
+  </div>
+
+  <!-- Privacy notice -->
+  <div class="lock-banner" style="margin-bottom:24px">
+    🔒 <strong>Privacy-first:</strong> No public feed exists. Your reports are only visible to you and your AI-matched partner. Contact details are hidden until both parties confirm recovery.
+  </div>
+
+  <!-- Private Match Sessions -->
+  <div class="flex flex-between flex-center mb-16">
+    <div class="section-head" style="margin:0">🎯 My Private Matches</div>
+    <button class="btn btn-sm btn-ghost" onclick="loadMyMatches()">↻ Refresh</button>
+  </div>
+  <div id="matchSessions"></div>
+
+  <hr class="divider">
+
+  <!-- My Reports -->
+  <div class="flex flex-between flex-center mb-16">
+    <div class="section-head" style="margin:0">📋 My Reports</div>
+    <a href="/report" class="btn btn-sm">+ New Report</a>
+  </div>
+  <div id="myReports"></div>
+
+  <hr class="divider">
+
+  <!-- Leaderboard -->
+  <div class="section-head">🏆 Recovery Heroes Leaderboard</div>
+  <div class="card" style="padding:0;overflow:hidden" id="leaderboard"></div>
+
+</div>
+{% endblock %}
